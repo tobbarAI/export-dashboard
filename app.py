@@ -1,12 +1,10 @@
 import streamlit as st
 
-st.set_page_config(page_title="Repo Test")
+st.set_page_config(page_title="Dashboard")
 
-st.title("🚀 Repository Test")
+st.title("Dashboard")
 
-st.success("Streamlit is working!")
-
-st.write("Python environment is working.")
+st.write("Vložte export.")
 
 # Test your repository imports here
 try:
