@@ -13,7 +13,7 @@ uploaded_file = st.file_uploader("Choose a file", type=["csv", "xlsx"])
 if uploaded_file is not None:
     st.success("File uploaded successfully!")
     df = pd.read_csv(uploaded_file)
-    st.write(df["Checked In"])
+    st.write(df["Checked In"].value_counts())
 
 
 
