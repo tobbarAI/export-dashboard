@@ -21,22 +21,22 @@ st.markdown("""
     /* KPI cards */
     .metric-card {
         background-color: white;
-        padding: 20px;
+        padding: 10px;
         border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        border: 2px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         text-align: center;
     }
 
     .metric-title {
         color: #6b7280;
         font-family: Arial, sans-serif;
-        font-size: 25px;
+        font-size: 15px;
         margin-bottom: 8px;
     }
 
     .metric-value {
-        font-size: 50px;
+        font-size: 35px;
         font-weight: 700;
         color: #111827;
     }
@@ -51,7 +51,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Dmka Dashboard")
+st.title("DM Beh Dashboard")
 
 st.write("Vložte export.")
 
@@ -123,32 +123,11 @@ if uploaded_file is not None:
 
     number_range = st.slider("Vyber rozsah čísel:", min_value=1, max_value=12000, value=(1,12000), step=100)
     st.write("Chybajúce čísla v rozsahu")
-    st.write(missing_numbers(df["Bib"], number_range[0], number_range[1]).head(10))
+    st.dataframe(missing_numbers(df["Bib"], number_range[0], number_range[1])[:10].transpose(),hide_index=True)
     st.divider()
     st.write(df[['First Name', 'Last Name','Email', 'Bib', 'Category', 'Checked In']].sort_values(by='Bib').set_index('Bib'))
 
     st.divider()
-
-    st.markdown("""
-    <style>
-        [data-testid="stDataFrame"] {
-            font-size:56px;
-        }
-    </style>
-    """, unsafe_allow_html=True)
-
-    
-    
-
-    table = (
-    df[['First Name', 'Last Name', 'Email', 'Bib', 'Category', 'Checked In']]
-    .sort_values(by='Bib')
-    .set_index('Bib'))
-
-    st.dataframe(
-    table,
-    use_container_width=True,
-    row_height=45)
 
 
 
