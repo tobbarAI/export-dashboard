@@ -124,13 +124,36 @@ if uploaded_file is not None:
     number_range = st.slider("Vyber rozsah čísel:", min_value=1, max_value=12000, value=(1,12000), step=100)
     st.write("Chybajúce čísla v rozsahu")
     st.write(missing_numbers(df["Bib"], number_range[0], number_range[1]).head(10))
+    st.divider()
+    st.write(df[['First Name', 'Last Name','Email', 'Bib', 'Category', 'Checked In']].sort_values(by='Bib').set_index('Bib'))
 
+    st.divider()
 
+    st.markdown("""
+    <style>
+        [data-testid="stDataFrame"] {
+            font-size:56px;
+        }
+    </style>
+    """, unsafe_allow_html=True)
 
     
+    
+
+    table = (
+    df[['First Name', 'Last Name', 'Email', 'Bib', 'Category', 'Checked In']]
+    .sort_values(by='Bib')
+    .set_index('Bib'))
+
+    st.dataframe(
+    table,
+    use_container_width=True,
+    row_height=45)
 
 
 
 st.divider()
+
+
 
 st.write("If you can see this page, the Streamlit app itself is running correctly.")
