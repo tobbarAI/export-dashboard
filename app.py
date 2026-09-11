@@ -3,6 +3,53 @@ import pandas as pd
 import time
 
 st.set_page_config(page_title="Dashboard")
+st.markdown("""
+<style>
+    /* Main page */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        max-width: 1200px;
+    }
+
+    /* Title */
+    h1 {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    /* KPI cards */
+    .metric-card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+
+    .metric-title {
+        color: #6b7280;
+        font-family: Arial, sans-serif;
+        font-size: 25px;
+        margin-bottom: 8px;
+    }
+
+    .metric-value {
+        font-size: 50px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    /* Section headers */
+    .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 25px;
+        margin-bottom: 10px;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 st.title("Dmka Dashboard")
 
@@ -18,14 +65,59 @@ def missing_numbers(numbers, start, end):
 
 
 if uploaded_file is not None:
-    st.success("File uploaded successfully!")
+    st.success("Súbor bol úspešne nahraný!")
+    col1, col2 = st.columns(2)
     df = pd.read_csv(uploaded_file)
-    if "Checked In" in df.columns:
-        st.write(df["Checked In"].value_counts())
-    if "Category" in df.columns:
-        st.write(df["Category"].value_counts())
+    #if "Checked In" in df.columns:
+    #    col1.write(df["Checked In"].value_counts().reindex(["Yes", "No"], fill_value=0))
+    #if "Category" in df.columns:
+        #col2.write(df["Category"].value_counts())
     if "Checked In" in df.columns and "Category" in df.columns:
         category_checkin = pd.crosstab(df["Category"],df["Checked In"])
+        category_checkin = pd.crosstab(df["Category"], df["Checked In"]).reindex(columns=["Yes", "No"],fill_value=0)
+        category_checkin["Checked In %"] = (category_checkin["Yes"] /(category_checkin["Yes"] + category_checkin["No"]) * 100).round(1)
+
+    total = len(df)
+    checked_in = (df["Checked In"] == "Yes").sum()
+    not_checked_in = (df["Checked In"] == "No").sum()
+    checked_in_pct = checked_in / total * 100 if total > 0 else 0
+    
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-title">Počet bežcov</div>
+            <div class="metric-value">{total:,}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    
+
+    with col2:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-title">Odprezentovaní</div>
+            <div class="metric-value" style="color: #10b981;">{checked_in:,}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col3:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-title">Neodprezentovaní</div>
+            <div class="metric-value" style="color: #ef4444;">{not_checked_in:,}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col4:
+        st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-title">V percentách</div>
+            <div class="metric-value">{checked_in_pct:.1f}%</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.divider()
 
     st.dataframe(category_checkin)
 
@@ -38,11 +130,6 @@ if uploaded_file is not None:
     
 
 
-try:
-    st. write("")
-except Exception as e:
-    st.error("❌ Repository import failed")
-    st.exception(e)
 
 st.divider()
 
