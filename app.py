@@ -36,7 +36,7 @@ st.markdown("""
     }
 
     .metric-value {
-        font-size: 35px;
+        font-size: 30px;
         font-weight: 700;
         color: #111827;
     }
