@@ -127,6 +127,8 @@ if uploaded_file is not None:
     columns=['First Name', 'Last Name','Email', 'Bib', 'Category']
     if 'Checked In' in df.columns:
         columns.append('Checked In')
+    if 'Corral' in df.columns:
+        columns.append('Corral')
     st.write(df[columns].sort_values(by='Bib').set_index('Bib'))
 
     st.divider()
