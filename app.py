@@ -77,49 +77,48 @@ if uploaded_file is not None:
         category_checkin = pd.crosstab(df["Category"], df["Checked In"]).reindex(columns=["Yes", "No"],fill_value=0)
         category_checkin["Checked In %"] = (category_checkin["Yes"] /(category_checkin["Yes"] + category_checkin["No"]) * 100).round(1)
 
-    total = len(df)
-    checked_in = (df["Checked In"] == "Yes").sum()
-    not_checked_in = (df["Checked In"] == "No").sum()
-    checked_in_pct = checked_in / total * 100 if total > 0 else 0
-    
+    if "Checked In" in df.columns:
+        total = len(df)
+        checked_in = (df["Checked In"] == "Yes").sum()
+        not_checked_in = (df["Checked In"] == "No").sum()
+        checked_in_pct = checked_in / total * 100 if total > 0 else 0
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">Počet bežcov</div>
+                <div class="metric-value">{total:,}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        
 
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">Počet bežcov</div>
-            <div class="metric-value">{total:,}</div>
-        </div>
-        """, unsafe_allow_html=True)
-    
+        with col2:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">Odprezentovaní</div>
+                <div class="metric-value" style="color: #10b981;">{checked_in:,}</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-    with col2:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">Odprezentovaní</div>
-            <div class="metric-value" style="color: #10b981;">{checked_in:,}</div>
-        </div>
-        """, unsafe_allow_html=True)
+        with col3:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">Neodprezentovaní</div>
+                <div class="metric-value" style="color: #ef4444;">{not_checked_in:,}</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-    with col3:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">Neodprezentovaní</div>
-            <div class="metric-value" style="color: #ef4444;">{not_checked_in:,}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    with col4:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-title">V percentách</div>
-            <div class="metric-value">{checked_in_pct:.1f}%</div>
-        </div>
-        """, unsafe_allow_html=True)
+        with col4:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-title">V percentách</div>
+                <div class="metric-value">{checked_in_pct:.1f}%</div>
+            </div>
+            """, unsafe_allow_html=True)
 
     st.divider()
-
-    st.dataframe(category_checkin)
+    if "Checked In" in df.columns and "Category" in df.columns:
+        st.dataframe(category_checkin)
 
     number_range = st.slider("Vyber rozsah čísel:", min_value=1, max_value=12000, value=(1,12000), step=100)
     st.write("Chybajúce čísla v rozsahu")
