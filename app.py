@@ -124,10 +124,12 @@ if uploaded_file is not None:
     st.write("Chybajúce čísla v rozsahu")
     st.dataframe(missing_numbers(df["Bib"], number_range[0], number_range[1])[:10].transpose(),hide_index=True)
     st.divider()
-    st.write(df[['First Name', 'Last Name','Email', 'Bib', 'Category', 'Checked In' if 'Checked In' in df.columns else None]].sort_values(by='Bib').set_index('Bib'))
+    columns=['First Name', 'Last Name','Email', 'Bib', 'Category']
+    if 'Checked In' in df.columns:
+        columns.append('Checked In')
+    st.write(df[columns].sort_values(by='Bib').set_index('Bib'))
 
     st.divider()
-
 
 
 st.divider()
