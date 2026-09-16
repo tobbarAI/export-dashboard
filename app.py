@@ -133,6 +133,23 @@ if uploaded_file is not None:
 
     st.divider()
 
+    # Filter category + empty Team Name
+    filtered = df[
+        (df["Category"] == "5K - Mum and daughter run") &
+        (df["Team Name"].isna() | (df["Team Name"].astype(str).str.strip() == ""))
+    ].copy()
+
+    # Count how many times each email address is used
+    email_counts = filtered["Email"].dropna().str.strip().value_counts()
+
+    # Crosstab: how many email addresses are used 1x, 2x, 3x, etc.
+    email_crosstab = pd.DataFrame({
+        "Number of Uses": email_counts.value_counts().index,
+        "Number of Email Addresses": email_counts.value_counts().values
+    }).sort_values("Number of Uses")
+
+    st.write(email_crosstab)
+
 
 st.divider()
 
