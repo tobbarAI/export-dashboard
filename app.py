@@ -120,7 +120,7 @@ if uploaded_file is not None:
     if "Checked In" in df.columns and "Category" in df.columns:
         st.dataframe(category_checkin)
 
-    number_range = st.slider("Vyber rozsah čísel:", min_value=1, max_value=12700, value=(1,12000), step=100)
+    number_range = st.slider("Vyber rozsah čísel:", min_value=1, max_value=12700, value=(1,12700), step=100)
     st.write("Chybajúce čísla v rozsahu")
     st.dataframe(missing_numbers(df["Bib"], number_range[0], number_range[1])[:15].transpose(),hide_index=True)
     st.divider()
