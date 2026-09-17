@@ -124,7 +124,7 @@ if uploaded_file is not None:
     st.write("Chybajúce čísla v rozsahu")
     st.dataframe(missing_numbers(df["Bib"], number_range[0], number_range[1])[:15].transpose(),hide_index=True)
     st.divider()
-    columns=['First Name', 'Last Name','Email','DOB', 'Bib', 'Category']
+    columns=['First Name', 'Last Name','Email','Dob', 'Bib', 'Category']
     if 'Checked In' in df.columns:
         columns.append('Checked In')
     if 'Corral' in df.columns:
